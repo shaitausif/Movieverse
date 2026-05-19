@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const favMovieSchema = new mongoose.Schema(
     {
+        user : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'user'
+        },
         movID:{
             type:Number,
             required:true,
