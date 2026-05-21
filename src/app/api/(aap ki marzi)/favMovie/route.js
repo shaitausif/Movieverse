@@ -6,13 +6,13 @@ import { NextResponse } from "next/server";
 export async function POST(request){
     try {
         const body = await request.json()
-        const {movID,user,movTitle,movDesc,movRating,movURL,movAdult} = body 
+        const {movID,movTitle,movDesc,movRating,movURL,movAdult} = body
         const { payload } = await getCurrentUser(request)
         await connectKaro()
 
         const userKiMovie = await FavMovies.findOne({
             movID:movID,
-            _id : payload._id
+            user : payload._id
         })
         if(!userKiMovie){
             await FavMovies.create({
