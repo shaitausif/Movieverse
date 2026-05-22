@@ -46,63 +46,75 @@ const page = () => {
 
   return (
     <>
-      <div className="w-full flex h-screen">
-        <div className="left w-[50%] bg-amber-500 "></div>
-        <div className="right w-[50%] bg-emerald-400 flex justify-center items-center ">
-          <div className="flex items-center justify-center gap-3 flex-col">
-            <h2 className="font-semibold text-2xl flex items-center justify-center">
+      <div className="signup w-full flex h-screen">
+        <div className="left w-[50%] ">
+          <img src="./popcorn-rm.png" alt="" />
+        </div>
+        <div className="right w-[50%] flex justify-center items-center ">
+        <div className="bg-[#1E293B] text-[#F8FAFC] rounded-2xl px-18 py-25 flex shadow-[#1E293B] shadow-2xl">
+          <div className="flex flex-col gap-8">
+          <div className="flex items-center justify-center gap-6 flex-col  ">
+            <h2 className="font-semibold text-6xl flex items-center justify-center text-[#F59E0B] ">
               Sign up <Signature />
             </h2>
-            <h5>Please Sign-in to enjoy full experience</h5>
-            <div className="flex items-center justify-center gap-4">
+            <h5 className="text-3xl text-sky-600">Please Sign-in to enjoy full experience</h5>
+          </div>
+            <div className="flex  items-center justify-center gap-4">
               <form
-                className="bg-blue-400 w-[120%] flex flex-col gap-4 px-4 py-5 text-center"
+                className=" w-[120%] bg-[#0F172A] rounded-2xl  flex flex-col items-start gap-4 px-7 py-15 text-center text-2xl"
                 onSubmit={handleSubmit}
-              >
+                >
                 <div>
-                  <label htmlFor="naam">Enter Name: </label>
-                  <input
+                  <label className="text-[#94A3B8]" htmlFor="naam">Enter Name: </label>
+                  <input className="border border-gray-500 "
+                    placeholder=""
                     onChange={handleChange}
                     value={form.username}
                     type="text"
                     name="username"
                     id="naam"
-                  />
+                    />
                 </div>
                 <div>
-                  <label htmlFor="age">Enter Age: </label>
-                  <input
+                  <label className="text-[#94A3B8]" htmlFor="age">Enter Age: </label>
+                  <input className="border border-gray-500 "
+                    placeholder=""
                     onChange={handleChange}
                     value={form.age}
                     type="number"
                     name="age"
                     id="age"
-                  />
+                    />
                 </div>
                 <div>
-                  <label htmlFor="email">Enter Email:</label>
-                  <input
+                  <label className="text-[#94A3B8]" htmlFor="email">Enter Email:</label>
+                  <input className="border border-gray-500 "
+                    placeholder=""
                     onChange={handleChange}
                     value={form.email}
                     type="email"
                     name="email"
                     id="email"
-                  />
+                    />
                 </div>
                 <div>
-                  <label htmlFor="password">Enter password: </label>
-                  <input
+                  <label className="text-[#94A3B8]" htmlFor="password">Enter password: </label>
+                  <input className="border border-gray-500 "
+                    placeholder=""
                     onChange={handleChange}
                     value={form.password}
                     type="password"
                     name="password"
                     id="password"
-                  />
+                    />
                 </div>
-                <h5>We won't share your credentials!</h5>
+                <h5 className="text-sky-600">We won't share your credentials!</h5>
+                 <div className="w-full flex justify-center ">
 
-                <button type="submit">Sign-Up</button>
+                <button className="border rounded-2xl px-7 py-1 bg-[#10B981] text-[#0F172A]" type="submit">Sign-Up</button>
+                 </div>
               </form>
+            </div>
             </div>
           </div>
         </div>
