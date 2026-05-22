@@ -22,8 +22,8 @@ const favMovieSchema = new mongoose.Schema(
             type:Number,
             required:true,
         },
-        movUrl:{
-            type:URL,
+        movURL:{
+            type: String,
             required:true,
         },
         movAdult:{

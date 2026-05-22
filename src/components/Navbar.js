@@ -1,21 +1,11 @@
 import React from 'react'
-
+import { BookHeart } from 'lucide-react';
 const Navbar = () => {
   return (
-         <>
-      <header>
-       <div className="flex justify-between items-center h-16 bg-[#0B0F19] text-[#F8FAFC] ">navbar
-       </div>
-      </header>
-      {/* <main className="bg-[#0F172A]">
-        <section>
-          <div className="text-white flex flex-col justify-center items-center h-screen">
-            <label>search bar</label>
-            <input type="text" placeholder="Enter movie name" className="rounded border border-gray-700"/>
-          </div>
-        </section>
-      </main> */}
-    </>
+    <div className='bg-[#0B5351] flex items-center justify-between text-2xl text-white min-h-4 p-4'>
+            <h1 className='text-3xl font-semibold'>Find Your Movie</h1>
+            <button title='Browse Your Favourites' className='flex justify-center items-center gap-2 px-4 p-2 bg-[#78BC61] cursor-pointer rounded-4xl text-xl active:scale-95  hover:translate-x-px '><BookHeart size={28} color="#AAFCB8" strokeWidth={2.25} absoluteStrokeWidth /> Favourite</button>
+    </div>
   )
 }
 

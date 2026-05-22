@@ -1,88 +1,211 @@
 'use client'
-// import Image from "next/image";
+
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import Navbar from "@/components/Navbar";
-// import { Badge } from "@/components/ui/badge"
-// import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { useState } from "react";
+import { Heart,ArrowDown, ArrowRight, ArrowLeft } from "lucide-react";
 
 
-export async function fetchMovies(query) {
+const Home = () => {
+  const [inputVal, setInputVal] = useState("");
+  const [movieList, setMovieList] = useState([]);
+  const [index, setindex] = useState(1);
+  const [favList, setFavList] = useState(
+    JSON.parse(localStorage.getItem("favMovies")) || [],
+  );
+  // console.log(inputVal);
+  // console.log(favList);
 
-  const url= `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}include_adult=false&language=en-US&page=1`;
+  // fill="#df0707"
+
+  const getMovie = async () => {
+    try {
+      const res = await fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=372e89abce180852b290b619db5b96bc&query=${inputVal}&include_adult=false&language=en-US&page=${index}`,
+      );
+      const data = await res.json();
+      
+      setMovieList(data.results);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useLayoutEffect(() => {
+    const timer = setTimeout(() => {
+      setindex(1)
+      getMovie();
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [inputVal]);
+
+  useLayoutEffect(() => {
+    const timer = setTimeout(() => {
+     
+      getMovie();
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [index]);
 
 
-    
-  console.log(process.env.NEXT_PUBLIC_TMDB_TOKEN); //data not coming from NEXT_PUBLIC_TMDB_TOKEN i think
-  
-  const options = {
-    method:"GET",
-    headers:{
-      accept:"application/json",
-      Authorization:`Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiZTJjMTAyZjA0NDlkZjdkYzE0Nzg0N2EzZjFkZWE0NiIsIm5iZiI6MTc1NTY0MDM5OC42NDksInN1YiI6IjY4YTRmMjRlZjMzNzI4MDQwMTNlODJmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-yS-AME0jEvmY65XUYrkf7vJvtNLUV-VqCLrnGshcW8`
+
+  useEffect(() => {
+    window.localStorage.setItem("favMovies", JSON.stringify(favList));
+  }, [favList]);
+
+  const inputBharh = (e) => {
+    setInputVal(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("yeh chala kya");
+  };
+
+
+
+
+  const loveThis = async(movie) => {
+    const filteredFav = favList.filter((favMovie) => {
+      return movie.id === favMovie.movie_id;
+    });
+    if (filteredFav.length > 0) {
+      console.log(movie);
+      setFavList((prev) => {
+        return prev.map((favM) => {
+          // console.log("Fav",favM)
+          // console.log(filteredFav)
+          return favM.movie_id == filteredFav[0].movie_id
+            ? {
+                ...favM,
+                is_fav: !favM.is_fav,
+              }
+            : favM;
+        });
+      });
+      console.log("Getting Triggered")
+       const res = await fetch('/api/favMovie',{
+      method : 'POST',
+      credentials : 'include',
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify({
+           movID : movie.id,
+                movTitle: movie.title,
+                movDesc: movie.overview,
+                movRating: movie.vote_average,
+                movURL: movie.poster_path,
+                movAdult: movie.adult
+      })
+    })
+
+    const data = await res.json()
+    console.log(data)
+    } else {
+      setFavList((prev) => {
+        return [...prev, { movie_id: movie.id, is_fav: true, movie: movie }];
+      });
     }
   };
 
-const res = await fetch(url, options);
-console.log("status:", res.status);
-const data = await res.json();
-console.log("data:", data);
-
-  // const data = await fetchMovies("batman");
-    // console.log(data);
-
-  return data.results;
-
-  
-}
-const [query, setquery] = useState("")
 
 
-export default function Home() {
+  // console.log(favList);
+
   return (
-        <>
-        <Navbar/>
-      <main >
-        <section className="bg-[#0F172A] h-screen flex justify-center gap-16 items-center flex-col">
-          <div className="text-white flex flex-col justify-center items-center ">
-            <label>search bar</label>
-            <input type="text" placeholder="Enter movie name" className="rounded border border-gray-700" onChange={(e) => setQuery(e.target.value)}/>
-             <button onClick={() => fetchMovies(query)}>  ✅
-              button
-            </button>
-          </div>
-          <div className="h-80 w-96 bg-[#fefffe25]">
-             <Card className="relative mx-auto w-full max-w-sm pt-0">
-               <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
-                 <img
-                      src="https://avatar.vercel.sh/shadcn1"
-                     alt="Event cover"
-                     className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-                   />
-               <CardHeader>
-            
-                <CardTitle>Design systems meetup</CardTitle>
-                 <CardDescription>
-                    A practical talk on component APIs, accessibility, and shipping
-                    faster.
-                  </CardDescription>
-                </CardHeader>
-           
-               </Card>
- 
+    <div className="bg-[#092327] min-h-dvh ">
+      <Navbar />
+      <div className="flex flex-col justify-center items-center gap-3 px-3 py-6">
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="  text-white flex p-10 text-2xl gap-3.5 items-center justify-center flex-col"
+        >
+          <label htmlFor="input">Search Any Movie:</label>
+          <input
+            className="bg-[#00A9A5] text-white  px-6 py-2 w-[120%] text-center rounded-2xl text-[20px]  border-gray-800 "
+            type="text"
+            name="input"
+            id="input"
+            placeholder="Enter Movie Name..."
+            value={inputVal}
+            onChange={inputBharh}
+          />
+          {/* <button type='submit'>Search</button> */}
+        </form>
+        {movieList.length > 0 && (
+          <>
+            <div className="bg-[#85B79D] flex justify-center items-center gap-4 p-4 w-[80%] mb-20  flex-wrap rounded-2xl">
+              {movieList.map((movie) => {
+                return (
+                  <div
+                    key={movie.id}
+                    className="bg-[#B3EFB2] flex justify-center w-75 items-center gap-2 flex-col px-2 py-4 text-center rounded-2xl hover:translate-px relative"
+                  >
+                    <img
+                      className="h-75 w-62.5 object-contain "
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt="{movie.title}"
+                    />
+                    <h3 className="text-xl font-semibold">{movie.title}</h3>
 
-          </div>
-        </section>
-      </main>
-        
+                    <p>Released on : {movie.release_date}</p>
+                    {(() => {
+                      // console.log(favList)
+                      const isFavorite = favList.some(
+                        (favMovie) =>
+                          String(favMovie.movie_id) === String(movie.id) &&
+                          favMovie.is_fav,
+                      );
 
-        </>
+                      return (
+                        <button
+                          onClick={async() => await loveThis(movie)}
+                          title="Mark As Favourite"
+                          className="absolute bottom-5.5 right-3 cursor-pointer hover:translate-y-0.5"
+                        >
+                          <Heart
+                            size={28}
+                            color="#df0707"
+                            strokeWidth={2.25}
+                            absoluteStrokeWidth
+                            fill={isFavorite ? "#df0707" : "transparent"}
+                          />
+                        </button>
+                      );
+                    })()}
+                  </div>
+                );
+              })}
+            </div>
+           {
+            movieList.length == 20 && (
+               <div className="bg-emerald-300 px-2 py-3 flex justify-center items-center gap-4 rounded-2xl ">
+                  <button onClick={()=>{
+                    index>0 ? () => {
+                      setindex(index-1)
+                  
+                    } : null
+                  }}
+                  disabled={
+                    index === 1 ? true : false
+                  }
+                      className={` hover:-translate-y-0.25`}><ArrowLeft /></button>
+                  <p className="text-xl">{index}</p>
+                  <button onClick={()=>{
+                    setindex(index+1)
+                    
+                  }} className="hover:-translate-y-0.25"><ArrowRight/></button>
+            </div>
+            )
+           }
+          </>
+        )}
+        <div className="bg-emerald-300"></div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Home;
