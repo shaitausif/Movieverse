@@ -48,6 +48,7 @@
 }
 
 :root {
+   
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -126,4 +127,9 @@
   html {
     @apply font-sans;
     }
+}
+
+
+.signup{
+   background: linear-gradient(to right, #F59E0B,#10B981);
 }
