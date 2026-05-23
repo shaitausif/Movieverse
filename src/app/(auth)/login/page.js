@@ -36,6 +36,7 @@ const page = () => {
       const data = await res.json();
       if (data.success) {
         toast.success("Login ho gaya tera bhai/behen");
+        localStorage.setItem("isLoggedIn",true)
         router.push("/");
       }else{
         toast.warn(data.message)
@@ -48,7 +49,7 @@ const page = () => {
   return (
     <>
       <div className="flex h-screen w-screen bg-size-[300%_300%] bg-linear-to-tr from-[#add6b4] via-[#77b959] to-teal-800 transition-all duration-1000 ease-in-out animate-gradient">
-        <div className="left w-[50%]  flex justify-center items-center ">
+        <div className="left w-full lg:w-[50%]  flex justify-center items-center ">
           <div className="flex items-center justify-center gap-3 flex-col">
             <div className="flex justify-center items-center gap-2 text-3xl">
               <h2 className="font-semibold flex items-center justify-center">
@@ -105,9 +106,9 @@ const page = () => {
             </div>
           </div>
         </div>
-        <div className="right w-[50%] flex justify-center items-center ">
+        <div className="right hidden lg:flex w-[50%] justify-center items-center ">
             <div className="flex justify-center items-center">
-                <img className="w-[80%] " src="./login.png" alt="log-in pic" />
+                <img className="w-[80%] " src="./images/login.png" alt="log-in pic" />
             </div>
         </div>
       </div>

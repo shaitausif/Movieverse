@@ -37,6 +37,7 @@ const page = () => {
       const data = await res.json();
       if (data.success) {
         toast.success("Signup ho gaya tera bhai/behen");
+        localStorage.setItem('isLoggedIn',true)
         router.push("/");
       }
     } catch (error) {
@@ -48,13 +49,13 @@ const page = () => {
     <>
       <div className="signup w-full flex h-screen">
         <div className="left w-[50%] ">
-          <img src="./popcorn-rm.png" alt="" />
+          <img src="./images/popcorn-rm.png" alt="" />
         </div>
         <div className="right w-[50%] flex justify-center items-center ">
-        <div className="bg-[#1E293B] text-[#F8FAFC] rounded-2xl px-18 py-25 flex shadow-[#1E293B] shadow-2xl">
+        <div className="bg-[#1E293B] text-[#F8FAFC] rounded-2xl px-8 py-10 flex shadow-[#1E293B] shadow-2xl">
           <div className="flex flex-col gap-8">
           <div className="flex items-center justify-center gap-6 flex-col  ">
-            <h2 className="font-semibold text-6xl flex items-center justify-center text-[#F59E0B] ">
+            <h2 className="font-semibold lg:text-4xl md:text-3xl flex items-center justify-center text-[#F59E0B] ">
               Sign up <Signature />
             </h2>
             <h5 className="text-3xl text-sky-600">Please Sign-in to enjoy full experience</h5>

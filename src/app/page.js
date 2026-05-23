@@ -2,13 +2,16 @@
 
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { Heart,ArrowDown, ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import MovieCard from "@/components/MovieCard";
+import TrendingMovie from "@/components/TrendingMovie";
 
 
 const Home = () => {
   const [inputVal, setInputVal] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [index, setindex] = useState(1);
+  const [trendingMovies, settrendingMovies] = useState([])
   const [favList, setFavList] = useState(
     JSON.parse(localStorage.getItem("favMovies")) || [],
   );
@@ -61,10 +64,24 @@ const Home = () => {
     console.log("yeh chala kya");
   };
 
-
+  useLayoutEffect(() => {
+    console.log("main chala")
+    async function fetchData(){
+      const res = await fetch('/api/trending-movie',{
+      method : 'GET',
+      credentials : 'include',
+    })
+    const data = await res.json()
+    settrendingMovies(data.movies)
+    console.log(data)
+    }
+    
+    fetchData()
+  },[])
 
 
   const loveThis = async(movie) => {
+    console.log("Love This",movie)
     const filteredFav = favList.filter((favMovie) => {
       return movie.id === favMovie.movie_id;
     });
@@ -110,12 +127,19 @@ const Home = () => {
 
 
 
+
+
   // console.log(favList);
 
   return (
     <div className="bg-[#092327] min-h-dvh ">
       <Navbar />
       <div className="flex flex-col justify-center items-center gap-3 px-3 py-6">
+        <TrendingMovie 
+        favList={favList}
+        movieList={trendingMovies}
+        loveThis={loveThis}
+        />
         <form
           onSubmit={(e) => {
             handleSubmit(e);
@@ -136,49 +160,7 @@ const Home = () => {
         </form>
         {movieList.length > 0 && (
           <>
-            <div className="bg-[#85B79D] flex justify-center items-center gap-4 p-4 w-[80%] mb-20  flex-wrap rounded-2xl">
-              {movieList.map((movie) => {
-                return (
-                  <div
-                    key={movie.id}
-                    className="bg-[#B3EFB2] flex justify-center w-75 items-center gap-2 flex-col px-2 py-4 text-center rounded-2xl hover:translate-px relative"
-                  >
-                    <img
-                      className="h-75 w-62.5 object-contain "
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt="{movie.title}"
-                    />
-                    <h3 className="text-xl font-semibold">{movie.title}</h3>
-
-                    <p>Released on : {movie.release_date}</p>
-                    {(() => {
-                      // console.log(favList)
-                      const isFavorite = favList.some(
-                        (favMovie) =>
-                          String(favMovie.movie_id) === String(movie.id) &&
-                          favMovie.is_fav,
-                      );
-
-                      return (
-                        <button
-                          onClick={async() => await loveThis(movie)}
-                          title="Mark As Favourite"
-                          className="absolute bottom-5.5 right-3 cursor-pointer hover:translate-y-0.5"
-                        >
-                          <Heart
-                            size={28}
-                            color="#df0707"
-                            strokeWidth={2.25}
-                            absoluteStrokeWidth
-                            fill={isFavorite ? "#df0707" : "transparent"}
-                          />
-                        </button>
-                      );
-                    })()}
-                  </div>
-                );
-              })}
-            </div>
+            <MovieCard loveThis={loveThis}  movieList={movieList} favList={favList} />
            {
             movieList.length == 20 && (
                <div className="bg-emerald-300 px-2 py-3 flex justify-center items-center gap-4 rounded-2xl ">
